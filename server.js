@@ -123,6 +123,54 @@ app.get('/robots.txt', (req, res) => {
 app.use('/static', express.static(path.join(__dirname, 'static')));
 app.use('/static', express.static(__dirname));
 
+// Custom fallback route mapping for style.css
+app.get('/static/css/style.css', (req, res) => {
+  const paths = [
+    path.join(__dirname, 'static', 'css', 'style.css'),
+    path.join(__dirname, 'css', 'style.css'),
+    path.join(__dirname, 'style.css')
+  ];
+  for (const p of paths) {
+    if (fs.existsSync(p)) {
+      res.type('text/css');
+      return res.sendFile(p);
+    }
+  }
+  res.status(404).send('style.css not found');
+});
+
+// Custom fallback route mapping for api.js
+app.get('/static/js/api.js', (req, res) => {
+  const paths = [
+    path.join(__dirname, 'static', 'js', 'api.js'),
+    path.join(__dirname, 'js', 'api.js'),
+    path.join(__dirname, 'api.js')
+  ];
+  for (const p of paths) {
+    if (fs.existsSync(p)) {
+      res.type('application/javascript');
+      return res.sendFile(p);
+    }
+  }
+  res.status(404).send('api.js not found');
+});
+
+// Custom fallback route mapping for app.js
+app.get('/static/js/app.js', (req, res) => {
+  const paths = [
+    path.join(__dirname, 'static', 'js', 'app.js'),
+    path.join(__dirname, 'js', 'app.js'),
+    path.join(__dirname, 'app.js')
+  ];
+  for (const p of paths) {
+    if (fs.existsSync(p)) {
+      res.type('application/javascript');
+      return res.sendFile(p);
+    }
+  }
+  res.status(404).send('app.js not found');
+});
+
 // ==================== AUTH APIs ====================
 
 app.post('/api/register', async (req, res) => {
