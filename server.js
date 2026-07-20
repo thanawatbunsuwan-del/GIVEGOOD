@@ -104,7 +104,9 @@ function requireLogin(req, res, next) {
 // ==================== STATIC ROUTES ====================
 
 app.get('/', (req, res) => {
-  const staticIndex = path.join(__dirname, 'static', 'index.html');
+  const staticIndex = fs.existsSync(path.join(__dirname, 'static', 'index.html'))
+    ? path.join(__dirname, 'static', 'index.html')
+    : path.join(__dirname, 'index.html');
   if (fs.existsSync(staticIndex)) {
     res.sendFile(staticIndex);
   } else {
@@ -118,7 +120,10 @@ app.get('/robots.txt', (req, res) => {
 });
 
 // Serve other static files
-app.use('/static', express.static(path.join(__dirname, 'static')));
+const staticPath = fs.existsSync(path.join(__dirname, 'static')) 
+  ? path.join(__dirname, 'static') 
+  : __dirname;
+app.use('/static', express.static(staticPath));
 
 // ==================== AUTH APIs ====================
 
