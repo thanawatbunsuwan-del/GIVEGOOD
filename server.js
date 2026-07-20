@@ -120,10 +120,8 @@ app.get('/robots.txt', (req, res) => {
 });
 
 // Serve other static files
-const staticPath = fs.existsSync(path.join(__dirname, 'static')) 
-  ? path.join(__dirname, 'static') 
-  : __dirname;
-app.use('/static', express.static(staticPath));
+app.use('/static', express.static(path.join(__dirname, 'static')));
+app.use('/static', express.static(__dirname));
 
 // ==================== AUTH APIs ====================
 
